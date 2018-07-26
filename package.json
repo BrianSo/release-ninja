@@ -1,0 +1,33 @@
+{
+  "name": "release-ninja",
+  "version": "0.1.0",
+  "description": "Release apk, ipa and other binaries in a fast and managed way",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BrianSo/release-ninja.git"
+  },
+  "keywords": [
+    "release",
+    "apk",
+    "ipa",
+    "android",
+    "ios"
+  ],
+  "author": "Brian So",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/BrianSo/release-ninja/issues"
+  },
+  "homepage": "https://github.com/BrianSo/release-ninja#readme",
+  "dependencies": {
+    "next": "^6.1.1",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1"
+  }
+}
