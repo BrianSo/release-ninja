@@ -4,7 +4,7 @@
   "description": "Release apk, ipa and other binaries in a fast and managed way",
   "main": "index.js",
   "scripts": {
-    "dev": "next",
+    "dev": "node server/server.js",
     "build": "next build",
     "start": "next start"
   },
@@ -26,6 +26,8 @@
   },
   "homepage": "https://github.com/BrianSo/release-ninja#readme",
   "dependencies": {
+    "axios": "^0.18.0",
+    "express": "^4.16.3",
     "mobx": "^5.0.3",
     "mobx-react": "^5.2.3",
     "next": "^6.1.1",
