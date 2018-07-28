@@ -16,13 +16,14 @@ const apiClientFactory = ({ req }, { env, csrf }) => {
   const requestInterceptor = async (config) => {
     // if is requesting api server
     if (/^\/[a-zA-Z]/.test(config.url) || config.url.indexOf(env.API_URL) === 0) {
-      config.withCredentials = true;
       config.params = config.params || {};
       config.headers = config.headers || {};
       config.headers['X-CSRF-Token'] = csrf.token;
 
       if (isServer) {
         config.headers.cookie = req.headers.cookie;
+      } else {
+        config.withCredentials = true;
       }
 
       return config;

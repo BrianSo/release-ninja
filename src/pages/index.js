@@ -10,9 +10,9 @@ export default class extends Component{
   static async getInitialProps (ctx) {
     let data = [];
     const crossSideUtils = CrossSideUtils.getInstance(ctx);
-    const client = crossSideUtils.get('client');
+    // const client = crossSideUtils.get('client');
 
-    data = (await client.get('https://api.tvmaze.com/search/shows?q=batman')).data;
+    // data = (await client.get('https://api.tvmaze.com/search/shows?q=batman')).data;
     return {
       shows: data
     }

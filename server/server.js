@@ -17,6 +17,7 @@ const nextHandler = nextApp.getRequestHandler();
     await nextApp.prepare();
 
     const server = express();
+    server.set('trust proxy', true);
     server.use((req, res, next) => {
       req.nextApp = nextApp;
       next();
@@ -32,10 +33,13 @@ const nextHandler = nextApp.getRequestHandler();
       // Hot reload the router
       const chokidar = require('chokidar');
       const watcher = chokidar.watch(__dirname);
+      const mongoosePath = path.resolve(__dirname, '../node_modules/mongoose');
       watcher.on('ready', () => watcher.on('all', () => {
         Object.keys(require.cache).forEach((id) => {
-          if (id.indexOf(__dirname) === 0) delete require.cache[id];
+          if (id.indexOf(__dirname) === 0 || id.indexOf(mongoosePath) === 0)
+            delete require.cache[id];
         });
+
         (async () => {
           app.hotReloadShutdown();
           app = require('./app'); // Reload app

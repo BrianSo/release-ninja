@@ -6,5 +6,7 @@ module.exports = {
     res.json({ result: 'success' });
   }),
 
-
+  devUser: asyncHandler(async (req, res) => {
+    res.json(req.user.toJSON());
+  }),
 };

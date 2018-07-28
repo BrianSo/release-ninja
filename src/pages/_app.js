@@ -32,6 +32,7 @@ export default class MyApp extends App {
     return (
       <Provider
         env={crossSideUtils.get('env')}
+        client={crossSideUtils.get('client')}
       >
         <Container>
           <Head>
