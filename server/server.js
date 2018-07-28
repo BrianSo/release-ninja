@@ -6,6 +6,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env.default') });
 const express = require('express');
 const next = require('next');
 const app = require('./app');
+const errorHandler = require('./middlewares/errorHandler');
 
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({ dev, dir: path.resolve(__dirname, '../src') });
@@ -60,6 +61,7 @@ const nextHandler = nextApp.getRequestHandler();
     }
 
     server.get('*', nextHandler);
+    server.use(errorHandler);
 
     server.listen(3000, (err) => {
       if (err) throw err;

@@ -3,6 +3,9 @@ const passportLocal = require("passport-local");
 const _ = require("lodash");
 
 const User = require("../models/User");
+const UnauthorizedError = require("../utils/errors").UnauthorizedError;
+const LoginFailedError = require("../utils/errors").LoginFailedError;
+const UserNotFoundError = require("../utils/errors").UserNotFoundError;
 
 const LocalStrategy = passportLocal.Strategy;
 
@@ -26,14 +29,14 @@ passport.use(new LocalStrategy({ usernameField: "email" }, async (email, passwor
   try{
     const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
-      return done(undefined, null, { message: `Email ${email} not found.` });
+      return done(new LoginFailedError());
     }
 
     const isMatch = await user.comparePassword(password);
     if (isMatch) {
       return done(undefined, user);
     }
-    return done(undefined, null, { message: "Invalid email or password." });
+    return done(new LoginFailedError());
 
   } catch (e) {
     done(e);
@@ -48,9 +51,7 @@ const isAuthenticated = (req, res, next) => {
     return next();
   }
   if (req.isAPICall) {
-    next({
-      errors: "not authenticated"
-    })
+    next(new UnauthorizedError())
   } else {
     req.session.returnTo = req.originalUrl;
     res.redirect("/cms/login");
