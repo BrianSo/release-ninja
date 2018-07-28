@@ -7,61 +7,38 @@ const User = require("../models/User");
 const LocalStrategy = passportLocal.Strategy;
 
 passport.serializeUser((user, done) => {
-  console.log('user', user);
   done(undefined, user.id);
 });
 
-passport.deserializeUser((id, done) => {
-  User.findById(id, (err, user) => {
-    done(err, user);
-  });
+passport.deserializeUser(async (id, done) => {
+  try{
+    done(undefined, await User.findById(id));
+  } catch (e) {
+    done(e);
+  }
 });
-
-// passport.deserializeUser(async (id, done) => {
-//   try{
-//     done(undefined, await User.findById(id));
-//   } catch (e) {
-//     done(e);
-//   }
-// });
 
 
 /**
  * Sign in using Email and Password.
  */
-passport.use(new LocalStrategy({ usernameField: "email" }, (email, password, done) => {
-  User.findOne({ email: email.toLowerCase() }, (err, user) => {
-    if (err) { return done(err); }
+passport.use(new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
+  try{
+    const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) {
-      return done(undefined, false, { message: `Email ${email} not found.` });
+      return done(undefined, null, { message: `Email ${email} not found.` });
     }
-    user.comparePassword(password).then((isMatch) => {
-      if (isMatch) {
-        return done(undefined, user);
-      }
-      return done(undefined, false, { message: "Invalid email or password." });
-    }, done);
-  });
+
+    const isMatch = await user.comparePassword(password);
+    if (isMatch) {
+      return done(undefined, user);
+    }
+    return done(undefined, null, { message: "Invalid email or password." });
+
+  } catch (e) {
+    done(e);
+  }
 }));
-// passport.use(new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
-//   try{
-//     const user = await User.findOne({ email: email.toLowerCase() });
-//     console.log('user',user);
-//     if (!user) {
-//       return done(undefined, null, { message: `Email ${email} not found.` });
-//     }
-//
-//     const isMatch = await user.comparePassword(password);
-//     console.log('isMatch',isMatch);
-//     if (isMatch) {
-//       return done(undefined, user);
-//     }
-//     return done(undefined, null, { message: "Invalid email or password." });
-//
-//   } catch (e) {
-//     done(e);
-//   }
-// }));
 
 /**
  * Login Required middleware.

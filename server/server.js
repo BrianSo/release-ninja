@@ -33,11 +33,16 @@ const nextHandler = nextApp.getRequestHandler();
       // Hot reload the router
       const chokidar = require('chokidar');
       const watcher = chokidar.watch(__dirname);
-      const mongoosePath = path.resolve(__dirname, '../node_modules/mongoose');
+
+      const modulesToDelete = ['mongoose'];
+      const modulePaths = modulesToDelete.map(m => path.resolve(__dirname, `../node_modules/${m}`));
+      modulePaths.push(__dirname);
       watcher.on('ready', () => watcher.on('all', () => {
         Object.keys(require.cache).forEach((id) => {
-          if (id.indexOf(__dirname) === 0 || id.indexOf(mongoosePath) === 0)
-            delete require.cache[id];
+          modulePaths.forEach(p => {
+            if (id.indexOf(p) === 0)
+              delete require.cache[id];
+          });
         });
 
         (async () => {
