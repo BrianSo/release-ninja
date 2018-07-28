@@ -1,6 +1,11 @@
+const dotenv = require('dotenv');
+const path = require('path');
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../.env.default') });
+
 const express = require('express');
 const next = require('next');
-const path = require('path');
+const app = require('./app');
 
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({ dev, dir: path.resolve(__dirname, '../src') });
@@ -12,6 +17,36 @@ const nextHandler = nextApp.getRequestHandler();
     await nextApp.prepare();
 
     const server = express();
+    server.use((req, res, next) => {
+      req.nextApp = nextApp;
+      next();
+    });
+
+    if(process.env.NODE_ENV === 'production') {
+      await app.bootstrap();
+      server.use(app);
+    } else {
+      let app = require('./app');
+      await app.bootstrap();
+
+      // Hot reload the router
+      const chokidar = require('chokidar');
+      const watcher = chokidar.watch(__dirname);
+      watcher.on('ready', () => watcher.on('all', () => {
+        Object.keys(require.cache).forEach((id) => {
+          if (id.indexOf(__dirname) === 0) delete require.cache[id];
+        });
+        app.hotReloadShutdown();
+        app = require('./app'); // Reload app
+        app.bootstrap().catch(ex => {
+          console.error(ex.stack);
+        });
+      }));
+      server.use(async function (req, res, next) {
+        await app.waitUntilBootstrapped();
+        app(req, res, next)
+      });
+    }
 
     server.get('*', nextHandler);
 
