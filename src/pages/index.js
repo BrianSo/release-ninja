@@ -4,6 +4,7 @@ import { inject } from 'mobx-react';
 import Link from 'next/link'
 
 @inject('client')
+@inject('env')
 export default class extends Component{
 
   static async getInitialProps ({ client, req }) {

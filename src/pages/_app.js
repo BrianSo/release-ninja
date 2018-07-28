@@ -2,26 +2,16 @@ import App, { Container } from 'next/app';
 import Head from 'next/head'
 import React from 'react'
 import { Provider } from 'mobx-react';
-import apiClientFactory from '../api/client.factory';
-
-const clientSideUtils = {};
+import * as crossSideUtils from '../utils/crossSideUtils';
 
 export default class MyApp extends App {
-
-  static getApiClient(ctx) {
-    if (!!ctx.req) {
-      return apiClientFactory.create(ctx);
-    } else {
-      clientSideUtils.client = clientSideUtils.client || apiClientFactory.create(ctx);
-      return clientSideUtils.client;
-    }
-  }
 
   static async getInitialProps ({ Component, router, ctx }) {
     console.log("APP getInitialProps");
     const isServer = !!ctx.req;
 
-    ctx.client = MyApp.getApiClient(ctx);
+    ctx.env = crossSideUtils.getEnvironment();
+    ctx.client = crossSideUtils.getApiClient(ctx);
 
     let pageProps = {};
     if (Component.getInitialProps) {
@@ -30,14 +20,18 @@ export default class MyApp extends App {
 
     return {
       pageProps,
-      client: ctx.client
+      client: ctx.client,
+      env: ctx.env,
     };
   }
 
   render () {
     const {Component, pageProps} = this.props;
     return (
-      <Provider client={MyApp.getApiClient({})}>
+      <Provider
+        client={crossSideUtils.getApiClient({})}
+        env={crossSideUtils.getEnvironment({})}
+      >
         <Container>
           <Head>
             <title>My page title</title>
