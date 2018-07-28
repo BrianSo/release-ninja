@@ -1,8 +1,19 @@
-import React from 'react';
-import Layout from '../components/Layout';
+import React, { Component } from 'react';
+import Layout from '../layouts/Layout';
+import { inject } from 'mobx-react';
 
-export default () => (
-  <Layout>
-    <p>This is the login page</p>
-  </Layout>
-);
+@inject('client')
+export default class extends Component{
+
+  componentDidMount() {
+    // console.log(this.props.client);
+  }
+
+  render() {
+    return (
+      <Layout>
+        <p>This is Login Page</p>
+      </Layout>
+    )
+  }
+};
