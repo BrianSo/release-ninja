@@ -9,7 +9,9 @@ const mongo = require('connect-mongo');
 const passport = require('passport');
 const lusca = require('lusca');
 const mongoose = require('mongoose');
+const csrf = require('./utils/csrf');
 const router = require('./router');
+const createDelayUntilEvent = require('./utils/delayUntilEvent');
 
 mongoose.Promise = Promise;
 const MongoStore = mongo(session);
@@ -34,7 +36,7 @@ app.use(lusca.xssProtection(true));
 
 // Router
 app.use(router);
-
+app.use(csrf);
 
 //////////////////////
 // Bootstrap and Shutdown
@@ -42,35 +44,15 @@ app.use(router);
 
 app.bootstrap = async () => {
   await mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true });
-  resolveWaitUntilBootstrapped();
+  console.log('App bootstrapped');
+  delayed.eventArrive();
 };
 app.hotReloadShutdown = async () => {
   await mongoose.disconnect();
 };
 
 ////// waitUntilBootstrapped
-
-let bootstrapped = false;
-const bootstrapResolves = [];
-function resolveWaitUntilBootstrapped() {
-  console.log('App bootstrapped');
-  bootstrapped = true;
-  for(const resolve of bootstrapResolves) {
-    try {
-      resolve();
-    } catch (ex) {
-      console.error(ex);
-    }
-  }
-  // clear the array
-  bootstrapResolves.splice(0,bootstrapResolves.length);
-}
-app.waitUntilBootstrapped = async () => {
-  if (bootstrapped)
-    return;
-  return new Promise((resolve) => {
-    bootstrapResolves.push(resolve);
-  });
-};
+const delayed = createDelayUntilEvent();
+app.waitUntilBootstrapped = delayed.delayUntilEvent;
 
 module.exports = app;

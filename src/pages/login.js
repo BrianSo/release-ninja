@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
 import Layout from '../layouts/Layout';
 import { inject } from 'mobx-react';
+import CrossSideUtils from "../utils/CrossSideUtils";
 
-@inject('client')
 export default class extends Component{
 
-  componentDidMount() {
-    // console.log(this.props.client);
+  static async getInitialProps (ctx) {
+    const crossSideUtils = CrossSideUtils.getInstance(ctx);
+    const client = crossSideUtils.get('client');
+
+    const res = await client.post('/dev');
+    return {
+      res: res.data
+    }
   }
 
   render() {
     return (
       <Layout>
         <p>This is Login Page</p>
+        {
+          JSON.stringify(this.props.res)
+        }
       </Layout>
     )
   }

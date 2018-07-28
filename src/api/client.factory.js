@@ -1,20 +1,32 @@
 import axios from 'axios';
-
+import CrossSideUtils from '../utils/CrossSideUtils';
 
 /**
  * Authentication:
  * Cookie + csrf
  */
 
-const apiClientFactory = ({ req }) => {
+const apiClientFactory = ({ req }, { env, csrf }) => {
   const isServer = !!req;
 
   const client = axios.create();
-  client.defaults.baseURL = process.env.API_URL;
+  client.defaults.baseURL = env.API_URL;
 
   // Request interceptor
   const requestInterceptor = async (config) => {
-    config.params = config.params || {};
+    // if is requesting api server
+    if (/^\/[a-zA-Z]/.test(config.url) || config.url.indexOf(env.API_URL) === 0) {
+      config.withCredentials = true;
+      config.params = config.params || {};
+      config.headers = config.headers || {};
+      config.headers['X-CSRF-Token'] = csrf.token;
+
+      if (isServer) {
+        config.headers.cookie = req.headers.cookie;
+      }
+
+      return config;
+    }
     return config;
   };
 
@@ -23,11 +35,16 @@ const apiClientFactory = ({ req }) => {
   // Response interceptor
   client.interceptors.response.use((response) => {
     return response;
-  }, (error) => Promise.reject(error));
+  }, (error) => {
+    return Promise.reject(error)
+  });
 
   return client;
 };
 
 export default {
-  create: apiClientFactory
+  dependencies: ['env', 'csrf'],
+  create: apiClientFactory,
+  serialize: () => 1,
+  deserialize: (data, dependencies) => apiClientFactory({}, dependencies),
 };

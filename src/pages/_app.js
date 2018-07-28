@@ -2,16 +2,16 @@ import App, { Container } from 'next/app';
 import Head from 'next/head'
 import React from 'react'
 import { Provider } from 'mobx-react';
-import * as crossSideUtils from '../utils/crossSideUtils';
+import CrossSideUtils from '../utils/CrossSideUtils';
+import providers from '../utils/providers';
 
 export default class MyApp extends App {
 
+  // executed on both server side and client side
   static async getInitialProps ({ Component, router, ctx }) {
     console.log("APP getInitialProps");
     const isServer = !!ctx.req;
-
-    ctx.env = crossSideUtils.getEnvironment();
-    ctx.client = crossSideUtils.getApiClient(ctx);
+    const crossSideUtils = CrossSideUtils.getInstance(ctx, providers);
 
     let pageProps = {};
     if (Component.getInitialProps) {
@@ -20,24 +20,22 @@ export default class MyApp extends App {
 
     return {
       pageProps,
-      client: ctx.client,
-      env: ctx.env,
+      isProvideFromServer: isServer,
+      provides: isServer ? crossSideUtils.serialize() : crossSideUtils.ctx.provides,
     };
   }
 
   render () {
-    const {Component, pageProps} = this.props;
+    const {Component, isProvideFromServer, provides, pageProps} = this.props;
+    const crossSideUtils = CrossSideUtils.getInstance({ provides }, providers);
+
     return (
       <Provider
-        client={crossSideUtils.getApiClient({})}
-        env={crossSideUtils.getEnvironment({})}
+        env={crossSideUtils.get('env')}
       >
         <Container>
           <Head>
             <title>My page title</title>
-            <meta name="viewport" content="initial-scale=1.0, width=device-width" key="viewport" />
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
-            <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
           </Head>
           <Component {...pageProps} />
         </Container>

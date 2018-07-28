@@ -36,9 +36,11 @@ const nextHandler = nextApp.getRequestHandler();
         Object.keys(require.cache).forEach((id) => {
           if (id.indexOf(__dirname) === 0) delete require.cache[id];
         });
-        app.hotReloadShutdown();
-        app = require('./app'); // Reload app
-        app.bootstrap().catch(ex => {
+        (async () => {
+          app.hotReloadShutdown();
+          app = require('./app'); // Reload app
+          await app.bootstrap();
+        })().catch(ex => {
           console.error(ex.stack);
         });
       }));
