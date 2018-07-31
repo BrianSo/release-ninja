@@ -5,6 +5,7 @@ module.exports = {
   errors: {
     // 400
     BadRequestError: 'Bad Request',
+    JoiValidationError: 'The request contains invalid value at path: {{errorPath}}',
 
     // 401
     UnauthorizedError: 'Unauthorized',

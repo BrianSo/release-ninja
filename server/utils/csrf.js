@@ -1,2 +1,10 @@
 const csurf = require('csurf');
-module.exports = csurf();
+
+if (process.env.TEST) {
+  module.exports = (req, res, next) => {
+    req.csrfToken = () => '1234';
+    next();
+  };
+} else {
+  module.exports = csurf();
+}

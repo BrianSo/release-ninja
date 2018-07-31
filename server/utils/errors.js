@@ -22,13 +22,6 @@ class UnauthorizedError extends BaseError {
   }
 }
 
-class LoginFailedError extends UnauthorizedError {
-  constructor(...args) {
-    super(...args);
-    this.code = 'LoginFailedError';
-  }
-}
-
 class ForbiddenError extends BaseError {
   constructor(extras) {
     super('ForbiddenError', 403, extras);
@@ -40,13 +33,6 @@ class NotFoundError extends BaseError {
   constructor(extras) {
     super('NotFoundError', 404, extras);
     Error.captureStackTrace(this, NotFoundError);
-  }
-}
-
-class UserNotFoundError extends NotFoundError {
-  constructor(...args) {
-    super(...args);
-    this.code = 'UserNotFoundError';
   }
 }
 
@@ -64,22 +50,42 @@ class InternalServerError extends BaseError {
   }
 }
 
-class NotImplementedError extends InternalServerError {
-  constructor(...args) {
-    super(...args);
-    this.code = 'NotImplementedError';
-  }
-}
-
 module.exports = {
   BaseError,
+
   BadRequestError,
+  JoiValidationError: class JoiValidationError extends BadRequestError{
+    constructor(joiError) {
+      super({ errorPath: joiError.details[0].path.join('.'), details: joiError.details });
+      this.code = 'JoiValidationError';
+    }
+  },
+
   UnauthorizedError,
+  LoginFailedError: class LoginFailedError extends UnauthorizedError {
+    constructor(...args) {
+      super(...args);
+      this.code = 'LoginFailedError';
+    }
+  },
+
   ForbiddenError,
+
   NotFoundError,
+  UserNotFoundError: class UserNotFoundError extends NotFoundError {
+    constructor(...args) {
+      super(...args);
+      this.code = 'UserNotFoundError';
+    }
+  },
+
   ConflictError,
-  UserNotFoundError,
-  LoginFailedError,
+
   InternalServerError,
-  NotImplementedError
+  NotImplementedError: class NotImplementedError extends InternalServerError {
+    constructor(...args) {
+      super(...args);
+      this.code = 'NotImplementedError';
+    }
+  },
 };

@@ -5,6 +5,7 @@ module.exports = {
   errors: {
     // 400
     BadRequestError: 'Bad Request',
+    JoiValidationError: '無效的請求, 位置: {{errorPath}}',
 
     // 401
     UnauthorizedError: 'Unauthorized',
