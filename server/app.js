@@ -9,7 +9,10 @@ const mongo = require('connect-mongo');
 const passport = require('passport');
 const lusca = require('lusca');
 const mongoose = require('mongoose');
+const requestLanguage = require('express-request-language');
 const csrf = require('./utils/csrf');
+const i18n = require('./middlewares/i18n');
+const languges = require('./i18n');
 const router = require('./router');
 const createDelayUntilEvent = require('./utils/delayUntilEvent');
 const User = require('./models/User');
@@ -31,6 +34,10 @@ app.use(session({
   }),
   cookie: { secure: process.env.NODE_ENV === 'production' }
 }));
+app.use(requestLanguage({
+  languages: Object.keys(languges),
+}));
+app.use(i18n);
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(lusca.xframe("SAMEORIGIN"));

@@ -1,19 +1,23 @@
-class BadRequestError extends Error {
+class BaseError extends Error{
+  constructor(code, status, extras) {
+    super(code || 'BaseError');
+    this.code = code || 'BaseError';
+    this.extras = extras || {};
+    this.status = status || 500;
+  }
+}
+
+class BadRequestError extends BaseError {
   constructor(extras) {
-    super('BadRequestError');
-    this.code = 'BadRequestError';
-    this.extras = extras;
-    this.status = 400;
+    super('BadRequestError', 400, extras);
     Error.captureStackTrace(this, BadRequestError);
   }
 }
 
-class UnauthorizedError extends Error {
+class UnauthorizedError extends BaseError {
   constructor(extras) {
-    super('UnauthorizedError');
+    super('UnauthorizedError', 401, extras);
     this.code = 'UnauthorizedError';
-    this.extras = extras;
-    this.status = 401;
     Error.captureStackTrace(this, UnauthorizedError);
   }
 }
@@ -25,22 +29,16 @@ class LoginFailedError extends UnauthorizedError {
   }
 }
 
-class ForbiddenError extends Error {
+class ForbiddenError extends BaseError {
   constructor(extras) {
-    super('ForbiddenError');
-    this.code = 'ForbiddenError';
-    this.extras = extras;
-    this.status = 400;
+    super('ForbiddenError', 403, extras);
     Error.captureStackTrace(this, ForbiddenError);
   }
 }
 
-class NotFoundError extends Error {
+class NotFoundError extends BaseError {
   constructor(extras) {
-    super('NotFoundError');
-    this.code = 'NotFoundError';
-    this.extras = extras;
-    this.status = 404;
+    super('NotFoundError', 404, extras);
     Error.captureStackTrace(this, NotFoundError);
   }
 }
@@ -52,22 +50,36 @@ class UserNotFoundError extends NotFoundError {
   }
 }
 
-class ConflictError extends Error {
+class ConflictError extends BaseError {
   constructor(extras) {
-    super('ConflictError');
-    this.code = 'ConflictError';
-    this.extras = extras;
-    this.status = 409;
+    super('ConflictError', 409, extras);
     Error.captureStackTrace(this, ConflictError);
   }
 }
 
+class InternalServerError extends BaseError {
+  constructor(extras) {
+    super('InternalServerError', 500, extras);
+    Error.captureStackTrace(this, ConflictError);
+  }
+}
+
+class NotImplementedError extends InternalServerError {
+  constructor(...args) {
+    super(...args);
+    this.code = 'NotImplementedError';
+  }
+}
+
 module.exports = {
+  BaseError,
   BadRequestError,
   UnauthorizedError,
   ForbiddenError,
   NotFoundError,
   ConflictError,
   UserNotFoundError,
-  LoginFailedError
+  LoginFailedError,
+  InternalServerError,
+  NotImplementedError
 };

@@ -749,6 +749,13 @@ abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
 
+accept-language@^3.0.4:
+  version "3.0.18"
+  resolved "https://registry.yarnpkg.com/accept-language/-/accept-language-3.0.18.tgz#f5025f17bf65a466a845838ccf98cdb877d83384"
+  dependencies:
+    bcp47 "^1.1.2"
+    stable "^0.1.6"
+
 accepts@~1.3.3, accepts@~1.3.5:
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/accepts/-/accepts-1.3.5.tgz#eb777df6011723a3b14e8a72c0805c8e86746bd2"
@@ -1218,6 +1225,10 @@ basic-auth@~2.0.0:
   resolved "https://registry.yarnpkg.com/basic-auth/-/basic-auth-2.0.0.tgz#015db3f353e02e56377755f962742e8981e7bbba"
   dependencies:
     safe-buffer "5.1.1"
+
+bcp47@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/bcp47/-/bcp47-1.1.2.tgz#354be3307ffd08433a78f5e1e2095845f89fc7fe"
 
 bcrypt-pbkdf@^1.0.0:
   version "1.0.2"
@@ -2504,6 +2515,13 @@ expect@^23.4.0:
     jest-message-util "^23.4.0"
     jest-regex-util "^23.3.0"
 
+express-request-language@^1.1.15:
+  version "1.1.15"
+  resolved "https://registry.yarnpkg.com/express-request-language/-/express-request-language-1.1.15.tgz#081d1f5c56994daaf9aa7034048101819ace7b4c"
+  dependencies:
+    accept-language "^3.0.4"
+    bcp47 "^1.1.2"
+
 express-session@^1.15.6:
   version "1.15.6"
   resolved "https://registry.yarnpkg.com/express-session/-/express-session-1.15.6.tgz#47b4160c88f42ab70fe8a508e31cbff76757ab0a"
@@ -3124,6 +3142,10 @@ https-browserify@^1.0.0:
 hyphenate-style-name@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/hyphenate-style-name/-/hyphenate-style-name-1.0.2.tgz#31160a36930adaf1fc04c6074f7eb41465d4ec4b"
+
+i18next@^11.5.0:
+  version "11.5.0"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-11.5.0.tgz#1e8df15d5d7e96b27da964abde6e7367169fb4c1"
 
 iconv-lite@0.4.19:
   version "0.4.19"
@@ -6029,6 +6051,10 @@ ssri@^5.2.4:
   resolved "https://registry.yarnpkg.com/ssri/-/ssri-5.3.0.tgz#ba3872c9c6d33a0704a7d71ff045e5ec48999d06"
   dependencies:
     safe-buffer "^5.1.1"
+
+stable@^0.1.6:
+  version "0.1.8"
+  resolved "https://registry.yarnpkg.com/stable/-/stable-0.1.8.tgz#836eb3c8382fe2936feaf544631017ce7d47a3cf"
 
 stack-utils@^1.0.1:
   version "1.0.1"

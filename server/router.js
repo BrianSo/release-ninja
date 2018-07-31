@@ -12,6 +12,7 @@ app.use(
   apiRouter
 );
 apiRouter.post('/dev', csrf, devHandlers.dev);
+apiRouter.get('/dev/error', csrf, devHandlers.devError);
 apiRouter.post('/login', csrf, userHandlers.login);
 apiRouter.post('/logout', csrf, userHandlers.logout);
 apiRouter.get("/user", passportAuth.isAuthenticated, devHandlers.devUser);
