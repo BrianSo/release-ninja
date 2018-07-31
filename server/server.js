@@ -1,7 +1,5 @@
-const dotenv = require('dotenv');
+require('./utils/configEnv');
 const path = require('path');
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
-dotenv.config({ path: path.resolve(__dirname, '../.env.default') });
 
 const express = require('express');
 const next = require('next');
@@ -11,6 +9,11 @@ const errorHandler = require('./middlewares/errorHandler');
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({ dev, dir: path.resolve(__dirname, '../src') });
 const nextHandler = nextApp.getRequestHandler();
+
+let serverReady = null;
+module.exports = new Promise(res => {
+  serverReady = res;
+});
 
 (async () => {
   try{
@@ -66,6 +69,7 @@ const nextHandler = nextApp.getRequestHandler();
     server.listen(3000, (err) => {
       if (err) throw err;
       console.log('> Ready on http://localhost:3000');
+      serverReady(server);
     });
 
   } catch (ex) {
