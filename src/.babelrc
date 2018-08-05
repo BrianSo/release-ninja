@@ -3,21 +3,35 @@
     "development": {
       "presets": ["next/babel"],
       "plugins": [
-        "transform-decorators-legacy"
+        "transform-decorators-legacy",
+        "transform-class-properties"
       ]
     },
     "production": {
-      "presets": ["next/babel"],
+      "presets": [
+        ["next/babel", {
+          "preset-env": {
+            "targets": {
+              "node": "current",
+              "browsers": ["> 2%", "last 2 versions", "not ie <= 8"]
+            }
+          }
+        }]
+      ],
       "plugins": [
-        "transform-decorators-legacy"
+        ["@babel/plugin-proposal-decorators", { "legacy": true }],
+        ["@babel/plugin-proposal-class-properties", { "loose": true }]
       ]
     },
     "test": {
       "presets": [
-        ["next/babel", { "preset-env": { "modules": "commonjs" } }]
+        ["next/babel", { "preset-env": {
+          "modules": "commonjs"
+        }}]
       ],
       "plugins": [
-        "transform-decorators-legacy"
+        ["@babel/plugin-proposal-decorators", { "legacy": true }],
+        ["@babel/plugin-proposal-class-properties", { "loose": true }]
       ]
     }
   }

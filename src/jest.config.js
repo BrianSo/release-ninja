@@ -1,12 +1,17 @@
 module.exports = {
+  displayName: "client",
   setupFiles: ['<rootDir>/test/setup.js'],
   testPathIgnorePatterns: [
     '<rootDir>/.next/',
   ],
   collectCoverageFrom: [
     "<rootDir>/**/*.js",
-    "!test/**/*.test.js",
     "!coverage/**/*",
+    "!test/**/*.test.js",
+    "!test/setup.js"
   ],
-  testURL: 'http://localhost/'
+  testURL: 'http://localhost/',
+  coverageReporters: [
+    "json"
+  ],
 };

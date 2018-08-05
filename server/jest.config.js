@@ -1,4 +1,5 @@
 module.exports = {
+  "displayName": "server",
   "moduleFileExtensions": [
     "js"
   ],
@@ -10,16 +11,15 @@ module.exports = {
   ],
   "collectCoverageFrom": [
     "<rootDir>/**/*.js",
-    "!test/**/*.test.js",
-    "!coverage/**/*",
     "!<rootDir>/utils/migrations/**/*.js",
-    "!<rootDir>/utils/seeders/**/*.js"
+    "!<rootDir>/utils/seeders/**/*.js",
+    "!coverage/**/*",
+    "!test/**/*.test.js",
+    "!test/setup.js"
   ],
   "testEnvironment": "node",
   "coverageReporters": [
-    "json",
-    "lcov",
-    "text-summary"
+    "json"
   ],
   transform: {},
 };

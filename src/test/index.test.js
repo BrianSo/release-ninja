@@ -1,6 +1,17 @@
 import { shallow } from 'enzyme'
 import React from 'react'
-import App from '../pages/index.js'
+import renderer from 'react-test-renderer'
+
+const App = () => (
+  <div>
+    <style jsx>{`
+      p {
+        color: red;
+      }
+    `}</style>
+    <p>Hello World!</p>
+  </div>
+);
 
 describe('With Enzyme', () => {
   it('App shows "Hello world!"', () => {
