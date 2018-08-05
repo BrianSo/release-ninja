@@ -1,6 +1,7 @@
-require('../server/utils/configEnv');
+require('../utils/configEnv');
 const supertest = require('supertest');
-const server = require('../server/server');
+jest.mock('next', () => require('../../__mocks__/next'));
+const server = require('../server');
 // require('../server/utils/loadModels');
 
 describe('app', () => {
@@ -8,7 +9,7 @@ describe('app', () => {
   let request;
   beforeAll(async () => {
     await server;
-    request = supertest('http://localhost:3000');
+    request = supertest('http://localhost:3000/api');
   });
 
   it('should work', async () => {

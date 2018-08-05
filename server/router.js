@@ -11,6 +11,7 @@ app.use(
   (req, res, next) => { req.isAPICall = true; next(); },
   apiRouter
 );
+apiRouter.get('', csrf, (req, res) => res.json({ online: true }));
 apiRouter.post('/dev', csrf, devHandlers.dev);
 apiRouter.get('/dev/error', csrf, devHandlers.devError);
 apiRouter.post('/dev/error', csrf, devHandlers.devError);

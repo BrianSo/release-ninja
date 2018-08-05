@@ -8,7 +8,9 @@
     "dev": "node server/server.js",
     "build": "next build",
     "start": "next start",
-    "test": "jest --coverage --forceExit"
+    "test": "NODE_ENV=test jest --coverage --forceExit",
+    "test-server": "NODE_ENV=test jest --coverage --forceExit --projects server",
+    "test-client": "NODE_ENV=test jest --coverage --forceExit --projects src"
   },
   "repository": {
     "type": "git",
@@ -28,29 +30,8 @@
   },
   "homepage": "https://github.com/BrianSo/release-ninja#readme",
   "jest": {
-    "moduleFileExtensions": [
-      "js"
-    ],
-    "setupTestFrameworkScriptFile": "<rootDir>/test/setup.js",
-    "testMatch": [
-      "**/test/**/*.test.js"
-    ],
-    "testPathIgnorePatterns": [
-      "<rootDir>/src/.next/",
-      "<rootDir>/node_modules/"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.js",
-      "server/**/*.js",
-      "!src/.next/**/*.js",
-      "!server/utils/migrations/**/*.js",
-      "!server/utils/seeders/**/*.js"
-    ],
-    "testEnvironment": "node",
-    "coverageReporters": [
-      "json",
-      "lcov",
-      "text-summary"
+    "projects": [
+      "src/jest.config.js"
     ]
   },
   "dependencies": {
@@ -84,6 +65,8 @@
   "devDependencies": {
     "babel-plugin-transform-decorators-legacy": "^1.3.5",
     "chokidar": "^2.0.4",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
     "eslint": "^5.2.0",
     "eslint-config-airbnb-base": "^13.0.0",
     "eslint-plugin-import": "^2.13.0",
