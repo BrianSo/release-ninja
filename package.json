@@ -6,8 +6,8 @@
   "scripts": {
     "lint": "eslint server",
     "dev": "node server/server.js",
-    "build": "next build",
-    "start": "next start",
+    "build": "next build src",
+    "start": "NODE_ENV=production node server/server.js",
     "test": "yarn test-server && yarn test-client && yarn coverage",
     "test-server": "NODE_ENV=test jest --coverage --forceExit --projects server",
     "test-client": "NODE_ENV=test jest --coverage --forceExit --projects src",
@@ -64,9 +64,9 @@
     "react-dom": "^16.4.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.56",
-    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.56",
-    "@babel/plugin-proposal-decorators": "^7.0.0-beta.56",
+    "@babel/core": "7.0.0-beta.42",
+    "@babel/plugin-proposal-class-properties": "7.0.0-beta.42",
+    "@babel/plugin-proposal-decorators": "7.0.0-beta.42",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.4.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
